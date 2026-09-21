@@ -2,6 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://jzonkel1.github.io/team-indigo/</loc><lastmod>2026-09-21</lastmod><priority>1.0</priority></url>
   <url><loc>https://jzonkel1.github.io/team-indigo/services.html</loc><lastmod>2026-09-21</lastmod><priority>0.8</priority></url>
+  <url><loc>https://jzonkel1.github.io/team-indigo/about.html</loc><lastmod>2026-09-21</lastmod><priority>0.8</priority></url>
+  <url><loc>https://jzonkel1.github.io/team-indigo/gallery.html</loc><lastmod>2026-09-21</lastmod><priority>0.8</priority></url>
+  <url><loc>https://jzonkel1.github.io/team-indigo/reviews.html</loc><lastmod>2026-09-21</lastmod><priority>0.8</priority></url>
   <url><loc>https://jzonkel1.github.io/team-indigo/make-readies.html</loc><lastmod>2026-09-21</lastmod><priority>0.8</priority></url>
   <url><loc>https://jzonkel1.github.io/team-indigo/painting.html</loc><lastmod>2026-09-21</lastmod><priority>0.8</priority></url>
   <url><loc>https://jzonkel1.github.io/team-indigo/carpet-tile-grout-cleaning.html</loc><lastmod>2026-09-21</lastmod><priority>0.8</priority></url>
@@ -18,4 +21,7 @@
   <url><loc>https://jzonkel1.github.io/team-indigo/robstown.html</loc><lastmod>2026-09-21</lastmod><priority>0.8</priority></url>
   <url><loc>https://jzonkel1.github.io/team-indigo/flour-bluff.html</loc><lastmod>2026-09-21</lastmod><priority>0.8</priority></url>
   <url><loc>https://jzonkel1.github.io/team-indigo/articles/make-ready-checklist-corpus-christi.html</loc><lastmod>2026-09-21</lastmod><priority>0.6</priority></url>
+  <url><loc>https://jzonkel1.github.io/team-indigo/privacy.html</loc><lastmod>2026-09-21</lastmod><priority>0.8</priority></url>
+  <url><loc>https://jzonkel1.github.io/team-indigo/terms.html</loc><lastmod>2026-09-21</lastmod><priority>0.8</priority></url>
+  <url><loc>https://jzonkel1.github.io/team-indigo/accessibility.html</loc><lastmod>2026-09-21</lastmod><priority>0.8</priority></url>
 </urlset>
