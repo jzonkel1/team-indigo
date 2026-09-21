@@ -75,7 +75,8 @@ section[id]{scroll-margin-top:84px}
    own sweep; on white the sweep's yellow stop is ~1.8:1, so light sections get the
    one stop that clears 3:1 at display size (#F05000 = 3.59). */
 .scr{font-family:var(--script);font-weight:400;font-style:normal;letter-spacing:.005em;
-  line-height:1;display:inline-block;padding:0 .06em .08em;color:var(--brand)}
+  line-height:1;display:inline-block;color:var(--brand);
+  padding:.66em .07em .46em;margin:-.66em 0 -.46em}
 h1:has(.scr),h2:has(.scr),h3:has(.scr){line-height:1.2}
 .hero .scr,.contact .scr,.band .scr,.pull .scr,.turn .scr,.ftr .scr,.mnav .scr,.hdr .scr,
 .phero .scr,.emer .scr,.step .scr{
@@ -105,11 +106,22 @@ h1:has(.scr),h2:has(.scr),h3:has(.scr){line-height:1.2}
 .btn--outline:hover{border-color:var(--brand)}
 
 /* header */
-.hdr{position:sticky;top:0;z-index:60;background:rgba(24,27,31,.92);backdrop-filter:blur(10px);
-  border-bottom:1px solid rgba(255,255,255,.08)}
-.hdr__in{display:flex;align-items:center;gap:1.25rem;padding:.7rem 0}
+/* The header has no on/off state. --navp is scroll progress: 0 at the top, 1 after
+   about 150px, eased out. It drives the whole row at once, so the bar compresses,
+   the logo shrinks and an ink veil fades up behind it with a 72px tail that runs
+   past the bar. The page slides UNDER something instead of meeting a slab that
+   switched itself on. Opacity on its own layer is compositor-only, so it is free.
+   Borrowed from the Prime Lift build. */
+.hdr{position:fixed;inset:0 0 auto 0;z-index:60;--navp:0}
+.hdr::before{content:"";position:absolute;inset:0 0 -72px 0;z-index:0;pointer-events:none;
+  opacity:var(--navp);background:linear-gradient(180deg,
+    rgba(16,19,23,.96) 0%,rgba(16,19,23,.93) 27%,rgba(16,19,23,.85) 46%,
+    rgba(16,19,23,.66) 61%,rgba(16,19,23,.42) 74%,rgba(16,19,23,.19) 86%,
+    rgba(16,19,23,.05) 95%,rgba(16,19,23,0) 100%)}
+.hdr__in{position:relative;z-index:1;display:flex;align-items:center;gap:1.25rem;
+  height:calc(78px - 12px * var(--navp))}
 .hdr__logo{display:flex;align-items:center;gap:.7rem;text-decoration:none;margin-right:auto}
-.hdr__logo img{height:50px;width:auto}
+.hdr__logo img{height:calc(50px - 8px * var(--navp));width:auto}
 .hdr__name{display:none;font-family:var(--script);font-weight:400;color:#fff;font-size:1.3rem;letter-spacing:.005em;line-height:1.05;padding-top:.12em}
 .hdr__name small{display:block;font-family:"Public Sans",sans-serif;font-weight:500;font-size:.68rem;
   letter-spacing:.11em;text-transform:uppercase;color:#9CA0A4;margin-top:.18rem}
@@ -129,8 +141,8 @@ h1:has(.scr),h2:has(.scr),h3:has(.scr){line-height:1.2}
 
 /* hero — crossfading real units */
 .hero{position:relative;min-height:min(78svh,700px);display:flex;align-items:center;
-  padding:2.5rem 0 3rem;overflow:hidden;background:var(--ink)}
-@media(min-width:900px){.hero{padding:3.5rem 0 4.5rem}}
+  padding:calc(78px + 1.5rem) 0 3rem;overflow:hidden;background:var(--ink)}
+@media(min-width:900px){.hero{padding:calc(78px + 2.2rem) 0 4.5rem}}
 .hero__bg{position:absolute;inset:0}
 .hero__bg picture,.hero__bg img{position:absolute;inset:0;width:100%;height:100%}
 .hero__bg img{object-fit:cover;object-position:50% 55%}
@@ -349,7 +361,8 @@ h1:has(.scr),h2:has(.scr),h3:has(.scr){line-height:1.2}
 .burger .ic{font-size:1.2rem}
 @media(min-width:900px){.burger{display:none}}
 .mnav{position:fixed;inset:0;z-index:80;background:#14171A;color:#fff;display:none;flex-direction:column;
-  padding:.85rem 1.25rem calc(1.1rem + env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain}
+  padding:.85rem 1.25rem calc(1.1rem + env(safe-area-inset-bottom));
+  overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain}
 .mnav.on{display:flex}
 .mnav::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--grad)}
 /* a soft wash of the badge behind the panel, so it is not a flat black sheet */
@@ -493,17 +506,15 @@ body.menu-open{overflow:hidden}
 
 /* gallery */
 .gal{columns:2;column-gap:.9rem}
-/* Two ragged masonry columns read as clutter on a phone. A two-row snap rail shows
-   the same eight shots in a deliberate order and costs a quarter of the scroll. */
+/* Two stacked rails read as clutter of a different kind. One row, moving on its
+   own, is the whole section: it says "there is more" without asking for a swipe. */
 @media(max-width:799px){
-  .gal--rail{columns:auto;column-gap:normal;display:grid;grid-auto-flow:column;grid-template-rows:1fr 1fr;
-    grid-auto-columns:70vw;gap:.7rem;overflow-x:auto;scroll-snap-type:x proximity;
-    scroll-padding-left:1.25rem;padding:.2rem 1.25rem 1rem;margin:0 -1.25rem;
-    -webkit-overflow-scrolling:touch;scrollbar-width:thin;
-    scrollbar-color:rgba(24,27,31,.22) transparent}
-  .gal--rail::-webkit-scrollbar{height:6px}
-  .gal--rail::-webkit-scrollbar-thumb{background:rgba(24,27,31,.22);border-radius:3px}
-  .gal--rail a{margin:0;scroll-snap-align:start;aspect-ratio:4/3;min-width:0}
+  .gal--rail{columns:auto;column-gap:normal;display:flex;gap:.7rem;
+    overflow-x:auto;overflow-y:hidden;scroll-padding-left:1.25rem;
+    padding:.2rem 1.25rem 1rem;margin:0 -1.25rem;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .gal--rail::-webkit-scrollbar{display:none}
+  .gal--rail a{margin:0;flex:0 0 68vw;aspect-ratio:4/3;min-width:0}
   .gal--rail img{width:100%;height:100%;object-fit:cover}
 }
 @media(min-width:800px){.gal{columns:4;column-gap:1.1rem}}
@@ -520,13 +531,16 @@ body.menu-open{overflow:hidden}
 .lb button:hover{background:rgba(255,255,255,.25)}
 
 /* reviews */
-.marquee{overflow:hidden;position:relative;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
-  mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-.marquee__track{display:flex;gap:1.25rem;width:max-content;animation:slide 130s linear infinite}
-.marquee:hover .marquee__track{animation-play-state:paused}
-@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media(prefers-reduced-motion:reduce){.marquee__track{animation:none}.marquee{overflow-x:auto}}@media(max-width:900px){.marquee{overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;scroll-padding-left:1.25rem;padding-inline:1.25rem;-webkit-mask-image:none;mask-image:none}.marquee__track{animation:none;width:auto}.marquee__track>.rev{scroll-snap-align:start}.marquee__track>.rev:nth-child(n+24){display:none}}
+/* This used to be one enormous animated transform layer, which is what iOS refused
+   to composite and why the whole section came up blank on a phone. It is now an
+   ordinary scroll container that a rAF loop nudges along, so there is no oversized
+   layer, it stays swipeable, and a finger on it stops it. */
+.marquee{display:flex;gap:1.25rem;overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;padding-inline:1.25rem;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+.marquee::-webkit-scrollbar{display:none}
+@media(max-width:900px){.marquee{-webkit-mask-image:none;mask-image:none}}
 .rev{flex:0 0 340px;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.5rem;
   display:flex;flex-direction:column}
 .rev__stars{margin-bottom:.75rem}
@@ -697,7 +711,6 @@ body.hascallbar{padding-bottom:72px}
 .phero{position:relative;background:var(--ink);color:#fff;overflow:hidden;isolation:isolate;
   min-height:max(520px,52svh);display:flex;align-items:center}
 @media(min-width:900px){.phero{min-height:min(56svh,520px)}}
-.phero::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--grad);z-index:3}
 .phero__bg{position:absolute;inset:0;z-index:0}
 .phero__bg img{width:100%;height:100%;object-fit:cover}
 .phero__bg::after{content:"";position:absolute;inset:0;
@@ -705,7 +718,8 @@ body.hascallbar{padding-bottom:72px}
 @media(min-width:900px){
   .phero__bg::after{background:linear-gradient(90deg,rgba(24,27,31,.88) 0%,rgba(24,27,31,.82) 52%,rgba(24,27,31,.56) 74%,rgba(24,27,31,.26) 100%)}
 }
-.phero__in{position:relative;z-index:2;padding:clamp(2.25rem,5.5vw,3.75rem) 0 clamp(1.9rem,4vw,2.9rem)}
+.phero__in{position:relative;z-index:2;
+  padding:calc(78px + clamp(1.4rem,4vw,2.4rem)) 0 clamp(1.9rem,4vw,2.9rem)}
 .phero h1{color:#fff;font-size:clamp(2rem,4.6vw,3.25rem);margin:0 auto .8rem;max-width:20ch;text-wrap:balance}
 .phero .lede{color:#CDD2D6;max-width:56ch}
 .phero .kicker{color:#E9B303}
@@ -813,7 +827,7 @@ a.svc:hover h3{color:var(--brand-dk)}
       <a href="gallery.html">Our Work</a>
       <a href="about.html">About</a>
       <a href="reviews.html">Reviews</a>
-      <a href="articles/make-ready-checklist-corpus-christi.html">Articles</a>
+      <a href="articles/make-ready-checklist-corpus-christi.html">Turn Guide</a>
     </nav>
     <a class="hdr__cta" href="tel:+13617748641">
       <svg class="ic" viewBox="0 0 24 24"><use href="#i-phone"/></svg>
@@ -841,7 +855,7 @@ a.svc:hover h3{color:var(--brand-dk)}
   <a href="gallery.html">Our Work<i class="mnav__chev"><svg class="ic" viewBox="0 0 24 24"><use href="#i-chev"/></svg></i></a>
   <a href="about.html">About Team Indigo<i class="mnav__chev"><svg class="ic" viewBox="0 0 24 24"><use href="#i-chev"/></svg></i></a>
   <a href="reviews.html">Reviews<i class="mnav__chev"><svg class="ic" viewBox="0 0 24 24"><use href="#i-chev"/></svg></i></a>
-  <a href="articles/make-ready-checklist-corpus-christi.html">Articles<i class="mnav__chev"><svg class="ic" viewBox="0 0 24 24"><use href="#i-chev"/></svg></i></a>
+  <a href="articles/make-ready-checklist-corpus-christi.html">Turn Guide<i class="mnav__chev"><svg class="ic" viewBox="0 0 24 24"><use href="#i-chev"/></svg></i></a>
   </nav>
   <div class="mnav__foot">
     <a class="btn btn--call" href="tel:+13617748641"><svg class="ic" viewBox="0 0 24 24"><use href="#i-phone"/></svg>Call (361) 774-8641</a>
@@ -993,6 +1007,24 @@ document.getElementById('yr').textContent = new Date().getFullYear();
   b.addEventListener('click', open); c.addEventListener('click', close);
   m.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', close); });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
+})();
+
+/* ---- header veil: scroll progress, not an on/off class ---- */
+(function(){
+  var hdr = document.querySelector('.hdr');
+  if(!hdr) return;
+  var ticking = false, last = '';
+  function paint(){
+    /* scrollY only: no layout reads in here, so this costs nothing */
+    var t = Math.min(1, Math.max(0, window.scrollY / 150));
+    var p = (1 - (1 - t) * (1 - t)).toFixed(3);   /* ease out */
+    if(p !== last){ last = p; hdr.style.setProperty('--navp', p); }
+    ticking = false;
+  }
+  addEventListener('scroll', function(){
+    if(!ticking){ ticking = true; requestAnimationFrame(paint); }
+  }, {passive:true});
+  paint();
 })();
 
 /* ---- hero: crossfade through real units ---- */
@@ -1172,9 +1204,66 @@ document.getElementById('yr').textContent = new Date().getFullYear();
   }
   var html = reviews.map(card).join('');
   var track = document.getElementById('revTrack');
-  if(track) track.innerHTML = html + html;
+  if(track) track.innerHTML = html;   /* the rail clones it for the wrap */
 })();
 
+
+/* ---- rails that move on their own ---- */
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('[data-rail]').forEach(function(rail){
+    var mq = rail.dataset.railMq;
+    if(mq && !matchMedia(mq).matches) return;       /* masonry on desktop: leave it */
+    var items = [].slice.call(rail.children);
+    if(!items.length) return;
+    /* a second copy makes the wrap seamless; it is decoration, so hide it from AT */
+    items.forEach(function(el){
+      var c = el.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');
+      c.querySelectorAll('a,button,input').forEach(function(f){ f.tabIndex = -1; });
+      if(c.tagName === 'A') c.tabIndex = -1;
+      rail.appendChild(c);
+    });
+    if(reduce) return;                              /* duplicated but never moves */
+    /* scrollLeft is quantised to whole pixels: `scrollLeft += 0.42` reads back as 0
+       every frame and the rail never moves at all. Keep the real position in a float
+       and assign it, so the integer part advances once the fraction carries. */
+    var half = 0, held = 0, prev = 0, pos = rail.scrollLeft, mine = -1;
+    var speed = parseFloat(rail.dataset.rail) || 22; /* px per second */
+    function measure(){ half = rail.scrollWidth > rail.clientWidth ? rail.scrollWidth / 2 : 0; }
+    measure();
+    addEventListener('resize', measure, {passive:true});
+    addEventListener('load', measure);
+    function hold(){ held++; }
+    function free(){ held = Math.max(0, held - 1); }
+    ['pointerenter','pointerdown','touchstart','focusin'].forEach(function(e){
+      rail.addEventListener(e, hold, {passive:true});
+    });
+    ['pointerleave','pointerup','pointercancel','touchend','touchcancel','focusout'].forEach(function(e){
+      rail.addEventListener(e, free, {passive:true});
+    });
+    /* a scroll position we did not write is a finger, or its momentum: adopt it and
+       carry on from there rather than yanking the rail back */
+    rail.addEventListener('scroll', function(){
+      if(Math.abs(rail.scrollLeft - mine) > 1.5) pos = rail.scrollLeft;
+    }, {passive:true});
+    document.addEventListener('visibilitychange', function(){ prev = 0; });
+    function step(now){
+      if(!prev) prev = now;
+      var dt = Math.min(64, now - prev); prev = now;
+      if(held || half <= 0 || document.hidden){
+        pos = rail.scrollLeft;
+      } else {
+        pos += speed * dt / 1000;
+        if(pos >= half) pos -= half;
+        rail.scrollLeft = pos;
+        mine = rail.scrollLeft;
+      }
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+})();
 </script>
 </body>
 </html>
